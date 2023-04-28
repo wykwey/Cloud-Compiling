@@ -65,12 +65,18 @@ jobs:
           name: Target Directory
           path: repository/target/
 
-      - name: Upload the whole repository's files
+      - name: Compress the whole repository's files
+        if: ${{ inputs.uploadRepo }}
+        uses: edgarrc/action-7z@v1
+        with:
+          args: 7z a -t7z -mx=9 repository.7z ./repository/
+
+      - name: Upload the whole repository's zipped file
         if: ${{ inputs.uploadRepo }}
         uses: actions/upload-artifact@v3
         with:
-          name: Whole Repository
-          path: repository/
+          name: Whole Repository (Unzip TWO times)
+          path: repository.7z
 
       - name: Upload target jar files
         if: ${{ inputs.uploadJars }}
