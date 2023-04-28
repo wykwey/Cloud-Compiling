@@ -1,12 +1,12 @@
 # By: XIAYM-gh
 
-name: Build Project with Maven
+name: Build Project with Gradle
 
 on:
   workflow_dispatch:
     inputs:
       repoAddress:
-        description: "仓库地址 (e.g. XIAYM-gh/Simple-Mirai-Bot)"
+        description: "仓库地址 (e.g. NLR-DevTeam/GrassPictures)"
         required: true
 
       javaVersion:
@@ -22,12 +22,12 @@ on:
         required: true
 
       buildArgument:
-        description: "构建时所用的命令 (e.g. package)"
+        description: "构建时所用的命令 (e.g. build)"
         required: true
-        default: "package"
+        default: "build"
 
       uploadJars:
-        description: "是否在构建后上传 target 文件夹中所有的 Jar 文件"
+        description: "是否在构建后上传 build 文件夹中的 lib 文件夹"
         type: boolean
         required: false
 
@@ -52,17 +52,18 @@ jobs:
       - name: Build now
         run: |
           cd repository
-          mvn -B --file pom.xml ${{ inputs.buildArgument }}
+          chmod +x gradlew
+          ./gradlew ${{ inputs.buildArgument }}
 
-      - name: Upload target directory
+      - name: Upload build directory
         uses: actions/upload-artifact@v3
         with:
-          name: Target Directory
-          path: repository/target/
+          name: Build Directory
+          path: repository/build/
 
-      - name: Upload target jar files
+      - name: Upload build/libs files
         if: ${{ inputs.uploadJars }}
         uses: actions/upload-artifact@v3
         with:
-          name: Target Jars
-          path: repository/target/*.jar
+          name: Build/Libs
+          path: repository/build/libs/
