@@ -40,11 +40,11 @@ jobs:
           java-version: "${{ inputs.javaVersion }}"
           distribution: temurin
 
-      - name: Clone full repository & Enter
+      - name: Clone full repository
         run: |
           git clone "https://github.com/${{ inputs.repoAddress }}" repository
-          cd repository
       
       - name: Build now
         run: |
+          cd repository
           mvn -B --file pom.xml ${{ inputs.buildArgument }}
