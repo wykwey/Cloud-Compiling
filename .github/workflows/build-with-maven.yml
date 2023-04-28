@@ -1,0 +1,51 @@
+# By: XIAYM-gh
+
+name: Build Project with Maven
+
+on:
+  workflow_dispatch:
+    inputs:
+      repoAddress:
+        description: "仓库地址 (e.g. XIAYM-gh/SMB-Server)"
+        required: true
+
+      javaVersion:
+        description: "Java 版本 (默认为 17)"
+
+        type: choice
+        options:
+          - "8"
+          - "11"
+          - "17"
+        default: "17"
+
+        required: true
+
+      buildArgument:
+        description: "构建时所用的命令 (e.g. package)"
+        required: true
+        default: "package"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # Set up maven env
+      - name: Set up env
+        uses: actions/setup-java@v3
+        with:
+          java-version: "${{ inputs.javaVersion }}"
+          distribution: temurin
+          cache: maven
+
+      - name: Clone full repository & Enter
+        run: |
+          git clone "https://github.com/${{ inputs.repoAddress }}" repository
+          cd repository
+      
+      - name: Build now
+        run: |
+          mvn -B --file pom.xml ${{ inputs.buildArgument }}
