@@ -48,3 +48,9 @@ jobs:
         run: |
           cd repository
           mvn -B --file pom.xml ${{ inputs.buildArgument }}
+
+      - name: Upload target directory
+        uses: actions/upload-artifact@v3
+        with:
+          name: Target Directory
+          path: target
