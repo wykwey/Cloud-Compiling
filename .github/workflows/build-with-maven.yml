@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       repoAddress:
-        description: "仓库地址 (e.g. XIAYM-gh/SMB-Server)"
+        description: "仓库地址 (e.g. XIAYM-gh/Simple-Mirai-Bot)"
         required: true
 
       javaVersion:
