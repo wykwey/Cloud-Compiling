@@ -26,6 +26,11 @@ on:
         required: true
         default: "package"
 
+      uploadJars:
+        description: "是否在构建后上传 target 文件夹中所有的 Jar 文件"
+        type: boolean
+        required: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -54,3 +59,10 @@ jobs:
         with:
           name: Target Directory
           path: repository/target
+
+      - name: Upload target jar files
+        if: ${{ inputs.uploadJars }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: Target Jars
+          path: repository/target/*.jar
