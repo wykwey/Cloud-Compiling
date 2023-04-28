@@ -26,7 +26,12 @@ on:
         required: true
         default: "build"
 
-      uploadJars:
+      uploadRepo:
+        description: "是否在构建后上传整个仓库"
+        type: boolean
+        required: false
+
+      uploadLibs:
         description: "是否在构建后上传 build 文件夹中的 lib 文件夹"
         type: boolean
         required: false
@@ -48,7 +53,7 @@ jobs:
       - name: Clone full repository
         run: |
           git clone "https://github.com/${{ inputs.repoAddress }}" repository
-      
+
       - name: Build now
         run: |
           cd repository
@@ -61,8 +66,15 @@ jobs:
           name: Build Directory
           path: repository/build/
 
+      - name: Upload the whole repository's files
+        if: ${{ inputs.uploadRepo }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: Whole Repository
+          path: repository/
+
       - name: Upload build/libs files
-        if: ${{ inputs.uploadJars }}
+        if: ${{ inputs.uploadLibs }}
         uses: actions/upload-artifact@v3
         with:
           name: Build/Libs

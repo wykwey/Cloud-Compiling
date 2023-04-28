@@ -26,6 +26,11 @@ on:
         required: true
         default: "package"
 
+      uploadRepo:
+        description: "是否在构建后上传整个仓库"
+        type: boolean
+        required: false
+
       uploadJars:
         description: "是否在构建后上传 target 文件夹中所有的 Jar 文件"
         type: boolean
@@ -59,6 +64,13 @@ jobs:
         with:
           name: Target Directory
           path: repository/target/
+
+      - name: Upload the whole repository's files
+        if: ${{ inputs.uploadRepo }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: Whole Repository
+          path: repository/
 
       - name: Upload target jar files
         if: ${{ inputs.uploadJars }}
