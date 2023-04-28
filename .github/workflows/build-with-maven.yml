@@ -39,7 +39,6 @@ jobs:
         with:
           java-version: "${{ inputs.javaVersion }}"
           distribution: temurin
-          cache: maven
 
       - name: Clone full repository & Enter
         run: |
