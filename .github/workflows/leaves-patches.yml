@@ -1,6 +1,6 @@
 # By: XIAYM-gh
 
-name: Build Project with Gradle
+name: Leaves - applyPatches
 
 on:
   workflow_dispatch:
