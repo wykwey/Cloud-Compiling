@@ -52,6 +52,8 @@ jobs:
 
       - name: Clone full repository
         run: |
+          git config --global user.email "git@github.com"
+          git config --global user.name "Actions-Runner"
           git clone "https://github.com/${{ inputs.repoAddress }}" repository
 
       - name: Build now
