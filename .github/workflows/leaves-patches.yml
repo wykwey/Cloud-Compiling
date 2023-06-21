@@ -1,0 +1,43 @@
+# By: XIAYM-gh
+
+name: Build Project with Gradle
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # Set up maven env
+      - name: Set up env
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Clone full leaves repository
+        run: |
+          git config --global user.email "git@github.com"
+          git config --global user.name "Actions-Runner"
+          git clone "https://github.com/LeavesMC/Leaves" repository
+
+      - name: Build now
+        run: |
+          cd repository
+          chmod +x gradlew
+          ./gradlew applyPatches
+
+      - name: Compress files
+        uses: edgarrc/action-7z@v1
+        with:
+          args: 7z a -t7z -mx=9 repository.7z ./repository/leaves-api/ ./repository/leaves-server/
+
+      - name: Upload the zipped file
+        uses: actions/upload-artifact@v3
+        with:
+          name: Source (Unzip 2 times)
+          path: repository.7z
