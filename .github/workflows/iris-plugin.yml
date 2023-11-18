@@ -35,7 +35,7 @@ jobs:
       - name: Compress files
         uses: edgarrc/action-7z@v1
         with:
-          args: 7z a -t7z -mx=9 repository.7z ./repository/build ./repository/Iris/build
+          args: 7z a -t7z -mx=9 repository.7z ./repository/build
 
       - name: Upload the zipped file
         uses: actions/upload-artifact@v3
