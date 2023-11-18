@@ -19,7 +19,7 @@ jobs:
           java-version: 17
           distribution: temurin
 
-      - name: Clone full leaves repository
+      - name: Clone full iris repository
         run: |
           git config --global user.email "git@github.com"
           git config --global user.name "Actions-Runner"
