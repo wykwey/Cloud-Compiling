@@ -6,33 +6,34 @@ on:
   workflow_dispatch:
     inputs:
       repoAddress:
-        description: "仓库地址 (e.g. NLR-DevTeam/GrassPictures)"
+        description: "Repo Identifier (e.g. NLR-DevTeam/GrassPictures)"
         required: true
 
       javaVersion:
-        description: "Java 版本 (默认为 17)"
+        description: "Java Ver (21 by default)"
 
         type: choice
         options:
           - "8"
           - "11"
           - "17"
-        default: "17"
+          - "21"
+        default: "21"
 
         required: true
 
       buildArgument:
-        description: "构建时所用的命令 (e.g. build)"
+        description: "Build Command (e.g. build)"
         required: true
         default: "build"
 
       uploadRepo:
-        description: "是否在构建后上传整个仓库"
+        description: "Upload the whole repository"
         type: boolean
         required: false
 
       uploadLibs:
-        description: "是否在构建后上传 build 文件夹中的 lib 文件夹"
+        description: "Upload the build/libs folder"
         type: boolean
         required: false
 

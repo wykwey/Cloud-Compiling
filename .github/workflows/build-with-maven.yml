@@ -6,33 +6,34 @@ on:
   workflow_dispatch:
     inputs:
       repoAddress:
-        description: "仓库地址 (e.g. XIAYM-gh/Simple-Mirai-Bot)"
+        description: "Repo Identifier (e.g. XIAYM-gh/Simple-Mirai-Bot)"
         required: true
 
       javaVersion:
-        description: "Java 版本 (默认为 17)"
+        description: "Java Ver (21 by default)"
 
         type: choice
         options:
           - "8"
           - "11"
           - "17"
-        default: "17"
+          - "21"
+        default: "21"
 
         required: true
 
       buildArgument:
-        description: "构建时所用的命令 (e.g. package)"
+        description: "Build Command (e.g. clean package)"
         required: true
         default: "package"
 
       uploadRepo:
-        description: "是否在构建后上传整个仓库"
+        description: "Upload the whole repository"
         type: boolean
         required: false
 
       uploadJars:
-        description: "是否在构建后上传 target 文件夹中所有的 Jar 文件"
+        description: "Upload jars inside target folder"
         type: boolean
         required: false
 
