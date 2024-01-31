@@ -2,6 +2,9 @@
 
 name: P - Aseprite - Windows x64
 
+permissions:
+  contents: write
+
 on:
   workflow_dispatch:
     inputs:
