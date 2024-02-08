@@ -40,5 +40,5 @@ jobs:
       - name: Upload the zipped file
         uses: actions/upload-artifact@v3
         with:
-          name: Source (Unzip 2 times)
+          name: Iris (Unzip 2 times)
           path: repository.7z
