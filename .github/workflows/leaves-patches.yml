@@ -34,7 +34,7 @@ jobs:
       - name: Compress files
         uses: edgarrc/action-7z@v1
         with:
-          args: 7z a -t7z -mx=9 repository.7z repository/leaves-api/ repository/leaves-server/ '-xr!repository/leaves-api/.git/' '-xr!repository/leaves-server/.git' '-xr!repository/leaves-server/.gradle'
+          args: 7z a -t7z -mx=9 repository.7z ./repository/leaves-api/ ./repository/leaves-server/ '-xr!./repository/leaves-api/.git/' '-xr!./repository/leaves-server/.git' '-xr!./repository/leaves-server/.gradle'
 
       - name: Upload the zipped file
         uses: actions/upload-artifact@v3

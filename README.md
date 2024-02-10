@@ -7,7 +7,7 @@ Currently supports:
 
 - [LeavesMC/Leaves](https://github.com/LeavesMC/Leaves) - applyPatches (Source generating)
 - [VolmitSoftware/Iris](https://github.com/VolmitSoftware/Iris) - Plugin Building
-- [aseprite/aseprite](https://github.com/aseprite/aseprite) - Windows x64 building *\(Private\)*
+- [aseprite/aseprite](https://github.com/aseprite/aseprite) - C++ Windows x64 building *\(Private\)*
 
 Note: "*\(Private\)*" means this builder will upload the artifacts to the `releases -> drafts` for some reason (e.g. EULA, restrictions), instead of uploading to `action -> artifacts`.
 
