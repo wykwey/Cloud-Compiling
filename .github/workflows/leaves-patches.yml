@@ -23,7 +23,7 @@ jobs:
         run: |
           git config --global user.email "git@github.com"
           git config --global user.name "Actions-Runner"
-          git clone "https://github.com/LeavesMC/Leaves" repository
+          git clone "https://github.com/LeavesMC/Leaves" repository --depth 1
 
       - name: Build now
         run: |
@@ -34,7 +34,7 @@ jobs:
       - name: Compress files
         uses: edgarrc/action-7z@v1
         with:
-          args: 7z a -t7z -mx=9 repository.7z ./repository/leaves-api/ ./repository/leaves-server/
+          args: 7z a -t7z -mx=9 repository.7z repository/leaves-api/ repository/leaves-server/ '-xr!repository/leaves-api/.git/' '-xr!repository/leaves-server/.git' '-xr!repository/leaves-server/.gradle'
 
       - name: Upload the zipped file
         uses: actions/upload-artifact@v3
