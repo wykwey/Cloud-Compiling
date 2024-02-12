@@ -21,6 +21,11 @@ jobs:
           repository: 'LeavesMC/Leaves'
           ref: '${{ inputs.branchToUse }}'
 
+      - name: Set up git auth
+        run: |
+          git config --global user.name ActionsRunner
+          git config --global user.email git@github.com
+
       - name: Set up env
         uses: actions/setup-java@v4
         with:
