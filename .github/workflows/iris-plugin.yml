@@ -10,24 +10,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Iris
+        uses: actions/checkout@v4
+        with:
+          repository: 'VolmitSoftware/Iris'
 
-      # Set up maven env
       - name: Set up env
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: 17
           distribution: temurin
 
-      - name: Clone full iris repository
-        run: |
-          git config --global user.email "git@github.com"
-          git config --global user.name "Actions-Runner"
-          git clone "https://github.com/VolmitSoftware/Iris" repository
-
       - name: Build now
         run: |
-          cd repository
           chmod +x gradlew
           ./gradlew setup
           ./gradlew iris
@@ -35,10 +30,11 @@ jobs:
       - name: Compress files
         uses: edgarrc/action-7z@v1
         with:
-          args: 7z a -t7z -mx=9 repository.7z ./repository/build
+          args: 7z a -t7z -mx=9 repository.7z ./repository/build/*.jar
 
-      - name: Upload the zipped file
-        uses: actions/upload-artifact@v3
+      - name: Upload the 7z file
+        uses: actions/upload-artifact@v4
         with:
-          name: Iris (Unzip 2 times)
+          name: Iris Jar (Unzip 2 times)
           path: repository.7z
+          compression-level: 0

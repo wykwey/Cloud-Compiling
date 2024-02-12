@@ -4,40 +4,42 @@ name: Leaves - applyPatches
 
 on:
   workflow_dispatch:
+    inputs:
+      branchToUse:
+        description: 'Branch to use'
+        default: 'master'
+        required: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Leaves
+        uses: actions/checkout@v4
+        with:
+          repository: 'LeavesMC/Leaves'
+          ref: '${{ inputs.branchToUse }}'
 
-      # Set up maven env
       - name: Set up env
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: 17
           distribution: temurin
 
-      - name: Clone full leaves repository
-        run: |
-          git config --global user.email "git@github.com"
-          git config --global user.name "Actions-Runner"
-          git clone "https://github.com/LeavesMC/Leaves" repository --depth 1
-
       - name: Build now
         run: |
-          cd repository
           chmod +x gradlew
           ./gradlew applyPatches
 
       - name: Compress files
         uses: edgarrc/action-7z@v1
         with:
-          args: 7z a -t7z -mx=9 repository.7z ./repository/leaves-api/ ./repository/leaves-server/ -xr!./repository/leaves-api/.git/ -xr!./repository/leaves-server/.git -xr!./repository/leaves-server/.gradle
+          args: 7z a -t7z -mx=9 repository.7z ./repository/leaves-api/ ./repository/leaves-server/ -x!./repository/leaves-api/.git/ -x!./repository/leaves-server/.git
 
-      - name: Upload the zipped file
-        uses: actions/upload-artifact@v3
+      - name: Upload the 7z file
+        uses: actions/upload-artifact@v4
         with:
-          name: Source (Unzip 2 times)
+          name: Leaves Source (Unzip 2 times)
           path: repository.7z
+          compression-level: 0

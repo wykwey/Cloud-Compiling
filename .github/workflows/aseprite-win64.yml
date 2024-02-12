@@ -9,41 +9,22 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
-      useMainCommit:
-        description: "Use the latest commit (Default true)"
-        type: boolean
-        default: true
-
-      tagName:
-        description: "Or specific the tag name (e.g. v1.3.2)"
-        type: string
+      branchToUse:
+        description: 'Specific the branch to use (e.g. v1.3.2)'
+        required: true
+        default: 'main'
 
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Check user input
-        shell: bash
-        run: |
-          if [[ "${{ github.event.inputs.useMainCommit }}" == "false" ]] && [[ "${{ github.event.inputs.tagName }}" == "" ]]; then
-            echo ERROR: No Tag Name Specificed.
-            exit 1
-          fi
-
-      - name: Clone Aseprite
-        shell: bash
-        run: |
-          ARGS=""
-          if [[ "${{ github.event.inputs.useMainCommit }}" == "false" ]]; then
-            ARGS="--branch ${{ github.event.inputs.tagName }}"
-          fi
-
-          git clone "https://github.com/aseprite/aseprite" repo $ARGS --depth 1
-          cd repo
-          git submodule update --init --recursive
+      - name: Checkout Aseprite
+        uses: actions/checkout@v4
+        with:
+          repository: 'aseprite/aseprite'
+          ref: '${{ inputs.branchToUse }}'
+          submodules: 'recursive'
 
       - uses: seanmiddleditch/gha-setup-ninja@master
       - uses: ilammy/msvc-dev-cmd@v1
@@ -51,8 +32,6 @@ jobs:
       - name: Get skia & Generate Makefile
         shell: bash
         run: |
-          cd repo
-
           curl -L -o skia.zip https://github.com/aseprite/skia/releases/download/m102-861e4743af/Skia-Windows-Release-x64.zip
           7z x skia.zip -oskia
           cmake -S . -B build -G Ninja \
@@ -66,20 +45,19 @@ jobs:
 
       - name: Compile
         shell: bash
-        run: |
-          cd repo/build && ninja
+        run: cd build && ninja
 
       - name: Get "libcrypto-1_1-x64.dll"
         shell: bash
         run: |
-          curl -L -o repo/build/bin/libcrypto-1_1-x64.dll https://github.com/feenkcom/libopenssl/releases/download/v0.5.0/crypto-x86_64-pc-windows-msvc.dll
+          curl -L -o build/bin/libcrypto-1_1-x64.dll https://github.com/feenkcom/libopenssl/releases/download/v0.5.0/crypto-x86_64-pc-windows-msvc.dll
 
       - name: Package
         shell: bash
         run: |
-          cd repo/build/bin/
-          7z a -tzip aseprite.zip data aseprite.exe libcrypto-1_1-x64.dll
-          cp aseprite.zip D:/a/
+          cd build/bin/
+          7z a -t7z -mx=9 aseprite.7z data aseprite.exe libcrypto-1_1-x64.dll
+          cp aseprite.7z D:/a/
 
       - name: Draft Release & Upload
         uses: softprops/action-gh-release@v1
@@ -91,4 +69,4 @@ jobs:
           draft: true
           prerelease: false
           files: |
-            D:/a/aseprite.zip
+            D:/a/aseprite.7z

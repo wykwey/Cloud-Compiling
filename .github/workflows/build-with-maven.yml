@@ -6,34 +6,34 @@ on:
   workflow_dispatch:
     inputs:
       repoAddress:
-        description: "Repo Identifier (e.g. XIAYM-gh/Simple-Mirai-Bot)"
+        description: 'Repo Identifier (e.g. XIAYM-gh/Simple-Mirai-Bot)'
         required: true
 
       javaVersion:
-        description: "Java Ver (21 by default)"
+        description: 'Java Ver (21 by default)'
 
         type: choice
         options:
-          - "8"
-          - "11"
-          - "17"
-          - "21"
-        default: "21"
+          - '8'
+          - '11'
+          - '17'
+          - '21'
+        default: '21'
 
         required: true
 
       buildArgument:
-        description: "Build Command (e.g. clean package)"
+        description: 'Build Command (e.g. clean package)'
         required: true
-        default: "package"
+        default: 'package'
 
       uploadRepo:
-        description: "Upload the whole repository"
+        description: 'Upload the whole repository'
         type: boolean
         required: false
 
       uploadJars:
-        description: "Upload jars inside target folder"
+        description: 'Upload jars inside target folder'
         type: boolean
         required: false
 
@@ -42,48 +42,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-
-      # Set up maven env
-      - name: Set up env
-        uses: actions/setup-java@v3
+      - name: Checkout repo
+        uses: actions/checkout@v4
         with:
-          java-version: "${{ inputs.javaVersion }}"
-          distribution: temurin
+          repository: '${{ inputs.repoAddress }}'
 
-      - name: Clone full repository
-        run: |
-          git config --global user.email "git@github.com"
-          git config --global user.name "Actions-Runner"
-          git clone "https://github.com/${{ inputs.repoAddress }}" repository
+      - name: Set up env
+        uses: actions/setup-java@v4
+        with:
+          java-version: '${{ inputs.javaVersion }}'
+          distribution: temurin
       
       - name: Build now
-        run: |
-          cd repository
-          mvn -B --file pom.xml ${{ inputs.buildArgument }}
+        run: mvn -B --file pom.xml ${{ inputs.buildArgument }}
 
       - name: Upload target directory
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Target Directory
-          path: repository/target/
+          path: target/
 
       - name: Compress the whole repository's files
         if: ${{ inputs.uploadRepo }}
         uses: edgarrc/action-7z@v1
         with:
-          args: 7z a -t7z -mx=9 repository.7z ./repository/
+          args: 7z a -t7z -mx=9 repository.7z *
 
       - name: Upload the whole repository's zipped file
         if: ${{ inputs.uploadRepo }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: Whole Repository (Unzip TWO times)
+          name: Whole Repository (Unzip 2 times)
           path: repository.7z
+          compression-level: 0
 
       - name: Upload target jar files
         if: ${{ inputs.uploadJars }}
         uses: actions/upload-artifact@v3
         with:
           name: Target Jars
-          path: repository/target/*.jar
+          path: target/*.jar
