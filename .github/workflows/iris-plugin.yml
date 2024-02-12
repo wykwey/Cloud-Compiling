@@ -36,11 +36,11 @@ jobs:
       - name: Compress files
         uses: edgarrc/action-7z@v1
         with:
-          args: 7z a -t7z -mx=9 repository.7z ./repository/build/*.jar
+          args: 7z a -t7z -mx=9 iris.7z /build/*.jar
 
       - name: Upload the 7z file
         uses: actions/upload-artifact@v4
         with:
           name: Iris Jar (Unzip 2 times)
-          path: repository.7z
+          path: iris.7z
           compression-level: 0

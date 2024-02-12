@@ -41,11 +41,11 @@ jobs:
       - name: Compress files
         uses: edgarrc/action-7z@v1
         with:
-          args: 7z a -t7z -mx=9 repository.7z ./repository/leaves-api/ ./repository/leaves-server/ -x!./repository/leaves-api/.git/ -x!./repository/leaves-server/.git
+          args: 7z a -t7z -mx=9 source.7z leaves-api/ leaves-server/ -x!leaves-api/.git/ -x!leaves-server/.git
 
       - name: Upload the 7z file
         uses: actions/upload-artifact@v4
         with:
           name: Leaves Source (Unzip 2 times)
-          path: repository.7z
+          path: source.7z
           compression-level: 0
