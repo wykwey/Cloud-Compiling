@@ -1,5 +1,4 @@
 # By: XIAYM-gh
-# Current TESTING
 
 name: Paper - applyPatches
 
@@ -42,7 +41,7 @@ jobs:
       - name: Compress files
         uses: edgarrc/action-7z@v1
         with:
-          args: 7z a -t7z -mx=9 source.7z *
+          args: 7z a -t7z -mx=9 source.7z Paper-API/ Paper-Server/ -x!Paper-API/.git -x!Paper-Server/.git
 
       - name: Upload the 7z file
         uses: actions/upload-artifact@v4
