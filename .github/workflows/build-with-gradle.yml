@@ -57,6 +57,7 @@ jobs:
         with:
           java-version: '${{ inputs.javaVersion }}'
           distribution: temurin
+          cache: gradle
 
       - name: Build now
         run: |

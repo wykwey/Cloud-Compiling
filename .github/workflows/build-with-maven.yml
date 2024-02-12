@@ -57,6 +57,7 @@ jobs:
         with:
           java-version: '${{ inputs.javaVersion }}'
           distribution: temurin
+          cache: maven
       
       - name: Build now
         run: mvn -B --file pom.xml ${{ inputs.buildArgument }}
