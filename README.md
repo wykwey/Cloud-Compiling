@@ -5,6 +5,7 @@ An easy way to compile maven / gradle based projects.
 
 Currently supports:
 
+- [PaperMC/Paper](https://github.com/PaperMC/Paper) - applyPatches (Source generating)
 - [LeavesMC/Leaves](https://github.com/LeavesMC/Leaves) - applyPatches (Source generating)
 - [VolmitSoftware/Iris](https://github.com/VolmitSoftware/Iris) - Plugin Building
 - [aseprite/aseprite](https://github.com/aseprite/aseprite) - C++ Windows x64 building *\(Private\)*

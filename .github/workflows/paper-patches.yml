@@ -1,0 +1,52 @@
+# By: XIAYM-gh
+# Current TESTING
+
+name: Paper - applyPatches
+
+on:
+  workflow_dispatch:
+    inputs:
+      branchToUse:
+        description: 'Branch to use (e.g. ver/1.19.4)'
+        default: 'master'
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Paper
+        uses: actions/checkout@v4
+        with:
+          repository: 'PaperMC/Paper'
+          ref: '${{ inputs.branchToUse }}'
+
+      - name: Set up git auth
+        run: |
+          git config --global user.name ActionsRunner
+          git config --global user.email git@github.com
+
+      - name: Set up env
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: temurin
+          cache: gradle
+
+      - name: Build now
+        run: |
+          chmod +x gradlew
+          ./gradlew applyPatches
+
+      - name: Compress files
+        uses: edgarrc/action-7z@v1
+        with:
+          args: 7z a -t7z -mx=9 source.7z *
+
+      - name: Upload the 7z file
+        uses: actions/upload-artifact@v4
+        with:
+          name: Paper Source (Unzip 2 times)
+          path: source.7z
+          compression-level: 0
